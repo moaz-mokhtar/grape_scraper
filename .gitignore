@@ -1,0 +1,42 @@
+# Python specific
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.vscode/
+.idea/
+
+# Compiled Python files
+*.pyc
+
+# Logs and temporary files
+logs/
+*.log
+*.log.*
+
+# Editor specific
+*~
+.vscode/
+.idea/
+
+# Docker related
+Dockerfile*
+docker-compose.yml
+
+# Dependency directories
+site-packages/
+lib/
+
+# Environment variables file
+# .env
+
+# Compiled binaries
+*.exe
+*.dll
+*.so
+*.dylib
