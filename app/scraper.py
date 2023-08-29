@@ -1,10 +1,8 @@
-
 import os
 import requests
 from bs4 import BeautifulSoup, Tag, ResultSet
-from dotenv import load_dotenv
+from app.db.schemas import DataSetBase
 
-load_dotenv()
 
 source_domain:str = os.environ.get("SOURCE_DOMAIN")
 source_url:str = os.environ.get("SOURCE_URL")
@@ -42,6 +40,24 @@ class DataSet:
             "description": self.description,
             "link": self.link
         }
+    
+    def to_schema(self)-> DataSetBase:
+        """
+        Transform into a DataSetBase schema
+
+        Returns:
+            db.schemas: A database schema DataSet model
+        """
+        model = DataSetBase(
+            name=self.name,
+            organization=self.organization,
+            description=self.description,
+            link=self.link
+        )
+            
+        return model
+        
+        
 
 
 def scrape(url:str, page_number:int)-> list[DataSet]:
@@ -55,10 +71,6 @@ def scrape(url:str, page_number:int)-> list[DataSet]:
     Returns:
         list[DataSet]: A list of tranformed datasets
     """
-
-    print("==== Scrape function ====")
-    print(source_url)
-    print(page_number)    
     
     if page_number is None:
         page_number = 1
@@ -80,13 +92,11 @@ def transform_soup(soup:BeautifulSoup) -> list[DataSet]:
     Returns:
         list[DataSet]: A list of datasets after transformation
     """
-    print("|======| Transform soup |======|")
+    
     data_set_items:ResultSet[Tag] = soup.find_all("li", class_="dataset-item has-organization")
     datasets:list[DataSet] = []
-    print(len(data_set_items))
     
     for item in data_set_items:
-        print("|====== Dataset Item ======|")
         datasets.append(transform_tag_item(item))
         
     return datasets
@@ -183,7 +193,7 @@ def find_dataset_link(item:Tag)->str:
     return link
 
 
-def get_scrape_data()->list[DataSet]:
+def get_scraped_data()->list[DataSet]:
     """
     Get scraped data
 
